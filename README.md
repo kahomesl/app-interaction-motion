@@ -1,6 +1,6 @@
 # App Interaction Motion
 
-一个适用于 **Codex、Claude Code、Cursor 与 Gemini CLI 的 App / Web 交互动效 Skill**，将 8 类动效的设计逻辑整理为可执行的实现建议和验收标准。
+一个适用于 **Codex、Claude Code、Cursor、Gemini CLI 与 DeepSeek Harness 的 App / Web 交互动效 Skill**，将 8 类动效的设计逻辑整理为可执行的实现建议和验收标准。
 
 核心理念：让距离、速度、空间层级和用户输入产生合理的视觉反馈，让用户感到自己在控制界面。
 
@@ -131,9 +131,39 @@ gemini skills install https://github.com/kahomesl/app-interaction-motion --scope
 
 Gemini CLI 的 `/skills` 用于技能管理；不要将其他客户端的 `/app-interaction-motion` 调用语法直接套用到这里。参见 [Gemini CLI 官方 Skills 管理文档](https://geminicli.com/docs/cli/using-agent-skills/)。
 
+### DeepSeek Harness（dsh）
+
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 是 DeepSeek AI 的开源 agent harness，简称 `dsh`。以下适用于启用了本地文件系统技能发现的配置。
+
+**个人安装**，在终端执行；命令同时兼容自定义 `DSH_HOME`：
+
+```bash
+mkdir -p "${DSH_HOME:-$HOME/.dsh}/skills"
+git clone https://github.com/kahomesl/app-interaction-motion.git "${DSH_HOME:-$HOME/.dsh}/skills/app-interaction-motion"
+```
+
+**项目安装**，在项目根目录执行：
+
+```bash
+mkdir -p .dsh/skills
+git clone https://github.com/kahomesl/app-interaction-motion.git .dsh/skills/app-interaction-motion
+```
+
+两种方式选一种。默认配置下，项目根目录按最近的 `.git` 祖先目录确定；没有该标记时使用当前工作目录。请从目标项目启动会话。
+
+确认 `SKILL.md` 直接位于 `skills/app-interaction-motion/` 下。文件系统技能发现只扫描一层，额外嵌套目录可能导致技能无法识别。默认启用目录监听时，新增技能会自动刷新到后续模型步骤。
+
+在会话中用自然语言指定技能：
+
+```text
+请使用 app-interaction-motion 技能，优化当前页面的手势转场，支持跟手、取消和松手回弹。
+```
+
+若没有发现技能，检查当前配置是否加载 `@deepseek-ai/dsh-skill`、`@deepseek-ai/dsh-skill-filesystem`，并启用了默认扫描目录；模型使用技能还需要相应消费者，例如 `@deepseek-ai/dsh-tool-skill`。自定义 agent 配置可能调整这些能力。详见 [官方文件系统技能文档](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/skill/skill-filesystem/README.md)。
+
 ## 使用示例
 
-以下使用 Codex 的 `$app-interaction-motion` 调用语法；Claude Code 和 Cursor 使用上面的斜杠调用方式，Gemini CLI 使用自然语言指定技能。
+以下使用 Codex 的 `$app-interaction-motion` 调用语法；Claude Code 和 Cursor 使用上面的斜杠调用方式，Gemini CLI 和 DeepSeek Harness 使用自然语言指定技能。
 
 ```text
 使用 $app-interaction-motion，为当前页面的 Tab 切换实现流体指示器，支持不同标签宽度和快速连续点击。
