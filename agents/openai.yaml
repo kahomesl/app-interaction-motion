@@ -1,0 +1,4 @@
+interface:
+  display_name: "App 交互动效"
+  short_description: "将八类 App 动效原则转成可实现、可检查的跟手反馈与连续转场"
+  default_prompt: "使用 $app-interaction-motion 为当前界面选择并实现合适的交互动效，保持跟手、状态连续和清晰的视觉反馈。"
