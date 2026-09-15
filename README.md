@@ -1,6 +1,6 @@
 # App Interaction Motion
 
-一个适用于 **Codex 与 Claude Code 的 App / Web 交互动效 Skill**，将 8 类动效的设计逻辑整理为可执行的实现建议和验收标准。
+一个适用于 **Codex、Claude Code、Cursor 与 Gemini CLI 的 App / Web 交互动效 Skill**，将 8 类动效的设计逻辑整理为可执行的实现建议和验收标准。
 
 核心理念：让距离、速度、空间层级和用户输入产生合理的视觉反馈，让用户感到自己在控制界面。
 
@@ -28,7 +28,17 @@
 
 这是指导 AI 工作的技能说明，不是可直接导入应用的动画组件库，也不附带可运行的演示 App。它不绑定具体框架；实现时沿用项目已有动画系统。
 
+## Agent 兼容性
+
+本仓库采用 `SKILL.md` 加 `references/` 的技能结构，核心内容为平台无关的 Markdown 指令，不依赖专用脚本或某个 agent 的工具 API。支持 Agent Skills 格式的 agent 原则上可以加载；实际安装目录、触发机制和可用工具由各客户端决定，不能保证所有 agent 都能自动发现或直接执行。
+
+不支持技能发现的 agent，也可以在能够读取仓库文件的前提下，将 `SKILL.md` 及相关参考文件作为任务上下文使用。`agents/openai.yaml` 仅提供 Codex 展示元数据。
+
+以下新增安装方式已对照官方文档核对，未在每个客户端中逐一执行安装测试。
+
 ## 安装
+
+选择你使用的客户端和安装范围即可。下方 shell 命令适用于 macOS、Linux 或兼容的 Bash 环境；请先安装相应客户端和 Git。
 
 ### Codex
 
@@ -68,9 +78,62 @@ git clone https://github.com/kahomesl/app-interaction-motion.git .claude/skills/
 
 Claude Code 读取 `SKILL.md` 和关联参考文件；`agents/openai.yaml` 是 Codex 的展示元数据，安装到 Claude Code 时可以保留。安装目录与调用方式参见 [Claude Code 官方 Skills 文档](https://code.claude.com/docs/en/skills)。
 
+### Cursor
+
+**个人安装（本机所有项目可用）**：
+
+```bash
+mkdir -p ~/.cursor/skills
+git clone https://github.com/kahomesl/app-interaction-motion.git ~/.cursor/skills/app-interaction-motion
+```
+
+**项目安装**，在项目根目录执行：
+
+```bash
+mkdir -p .cursor/skills
+git clone https://github.com/kahomesl/app-interaction-motion.git .cursor/skills/app-interaction-motion
+```
+
+两种方式选一种。重新打开 Cursor 后，在 Agent 聊天中输入 `/`，搜索并选择 `app-interaction-motion`，然后输入任务，例如：
+
+```text
+/app-interaction-motion 优化卡片拖拽的磁吸与回弹，保持快速反向拖动时的状态连续。
+```
+
+可在 Customize → Skills 查看是否已发现技能。本机个人安装不等同于远程或 Cloud Agent 已安装；远程场景需按 Cursor 文档配置。参见 [Cursor 官方 Skills 文档](https://cursor.com/docs/skills)。
+
+### Gemini CLI
+
+**个人安装（默认范围）**，在终端执行：
+
+```bash
+gemini skills install https://github.com/kahomesl/app-interaction-motion
+```
+
+**项目安装**，在项目根目录执行：
+
+```bash
+gemini skills install https://github.com/kahomesl/app-interaction-motion --scope workspace
+```
+
+两种方式选一种，按客户端提示确认安装来源。已打开会话时，在 Gemini CLI 中依次输入：
+
+```text
+/skills reload
+/skills list
+```
+
+确认列表出现 `app-interaction-motion` 后，用自然语言请求使用该技能：
+
+```text
+请使用 app-interaction-motion 技能，为图片预览实现从缩略图到全屏的连续转场。
+```
+
+Gemini CLI 的 `/skills` 用于技能管理；不要将其他客户端的 `/app-interaction-motion` 调用语法直接套用到这里。参见 [Gemini CLI 官方 Skills 管理文档](https://geminicli.com/docs/cli/using-agent-skills/)。
+
 ## 使用示例
 
-以下使用 Codex 的 `$app-interaction-motion` 调用语法；在 Claude Code 中，使用上面的 `/app-interaction-motion` 命令并附上任务描述。
+以下使用 Codex 的 `$app-interaction-motion` 调用语法；Claude Code 和 Cursor 使用上面的斜杠调用方式，Gemini CLI 使用自然语言指定技能。
 
 ```text
 使用 $app-interaction-motion，为当前页面的 Tab 切换实现流体指示器，支持不同标签宽度和快速连续点击。
