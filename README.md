@@ -1,6 +1,6 @@
 # App Interaction Motion
 
-一个用于 **Codex 的 App / Web 交互动效 Skill**，将 8 类动效的设计逻辑整理为可执行的实现建议和验收标准。
+一个适用于 **Codex 与 Claude Code 的 App / Web 交互动效 Skill**，将 8 类动效的设计逻辑整理为可执行的实现建议和验收标准。
 
 核心理念：让距离、速度、空间层级和用户输入产生合理的视觉反馈，让用户感到自己在控制界面。
 
@@ -30,6 +30,8 @@
 
 ## 安装
 
+### Codex
+
 将本仓库克隆到 Codex 的个人 skills 目录：
 
 ```bash
@@ -40,7 +42,35 @@ git clone https://github.com/kahomesl/app-interaction-motion.git "${CODEX_HOME:-
 
 也可以下载仓库 ZIP，解压后将文件夹命名为 `app-interaction-motion`，放入同一 skills 目录。确保 `SKILL.md` 直接位于该文件夹下。
 
+### Claude Code
+
+**个人安装（所有项目可用）**，在终端执行：
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/kahomesl/app-interaction-motion.git ~/.claude/skills/app-interaction-motion
+```
+
+**项目安装（仅当前项目可用）**，在项目根目录执行：
+
+```bash
+mkdir -p .claude/skills
+git clone https://github.com/kahomesl/app-interaction-motion.git .claude/skills/app-interaction-motion
+```
+
+两种方式选一种即可。目标目录已存在时，先检查已有内容。也可以下载 ZIP，将解压后的技能文件夹放入上述目录；确认路径为 `app-interaction-motion/SKILL.md`，不要多嵌套一层文件夹。
+
+在 Claude Code 中输入以下命令调用：
+
+```text
+/app-interaction-motion 为当前页面的 Tab 切换实现流体指示器，支持快速连续点击。
+```
+
+Claude Code 读取 `SKILL.md` 和关联参考文件；`agents/openai.yaml` 是 Codex 的展示元数据，安装到 Claude Code 时可以保留。安装目录与调用方式参见 [Claude Code 官方 Skills 文档](https://code.claude.com/docs/en/skills)。
+
 ## 使用示例
+
+以下使用 Codex 的 `$app-interaction-motion` 调用语法；在 Claude Code 中，使用上面的 `/app-interaction-motion` 命令并附上任务描述。
 
 ```text
 使用 $app-interaction-motion，为当前页面的 Tab 切换实现流体指示器，支持不同标签宽度和快速连续点击。
